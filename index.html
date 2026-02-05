@@ -1,0 +1,1908 @@
+<!doctype html>
+<html lang="pt-BR" class="h-full">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>INBATEC - Portfólio de Produtos</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    body { box-sizing: border-box; }
+    * { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .title-font { font-family: 'Space Grotesk', sans-serif; }
+
+    .slide { display: none; animation: fadeIn 0.5s ease-out; }
+    .slide.active { display: flex; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes slideInLeft {
+      from { opacity: 0; transform: translateX(-30px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes slideInRight {
+      from { opacity: 0; transform: translateX(30px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes scaleIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    .animate-slide-left { animation: slideInLeft 0.6s ease-out forwards; }
+    .animate-slide-right { animation: slideInRight 0.6s ease-out forwards; }
+    .animate-scale { animation: scaleIn 0.5s ease-out forwards; }
+    .animate-pulse-slow { animation: pulse 3s ease-in-out infinite; }
+
+    .delay-1 { animation-delay: 0.1s; opacity: 0; }
+    .delay-2 { animation-delay: 0.2s; opacity: 0; }
+    .delay-3 { animation-delay: 0.3s; opacity: 0; }
+    .delay-4 { animation-delay: 0.4s; opacity: 0; }
+    .delay-5 { animation-delay: 0.5s; opacity: 0; }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #0ea5e9, #8b5cf6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .card-hover { transition: all 0.3s ease; }
+    .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.15); }
+
+    .progress-bar { transition: width 0.3s ease; }
+    .nav-dot { transition: all 0.2s ease; }
+    .nav-dot:hover { transform: scale(1.3); }
+    .nav-dot.active { transform: scale(1.2); }
+
+    .icon-container {
+      background: linear-gradient(135deg, rgba(14, 165, 233, 0.1), rgba(139, 92, 246, 0.1));
+    }
+
+    .geometric-bg {
+      background-image:
+        radial-gradient(circle at 20% 80%, rgba(14, 165, 233, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(236, 72, 153, 0.05) 0%, transparent 40%);
+    }
+
+    .section-badge { background: linear-gradient(135deg, #0ea5e9, #8b5cf6); }
+
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #f1f5f9; }
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(135deg, #0ea5e9, #8b5cf6);
+      border-radius: 3px;
+    }
+  </style>
+
+  <style>@view-transition { navigation: auto; }</style>
+</head>
+
+<body class="h-full bg-slate-50 overflow-hidden">
+  <div id="app" class="h-full w-full flex flex-col geometric-bg">
+
+    <!-- Header Navigation -->
+    <header class="flex-shrink-0 bg-white border-b border-slate-200 px-4 py-4 z-50">
+      <div class="w-full">
+        <!-- Top Bar -->
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl section-badge flex items-center justify-center">
+              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+            </div>
+            <div>
+              <h1 id="header-company" class="title-font font-bold text-slate-800 text-lg">INBATEC</h1>
+              <p id="header-subtitle" class="text-xs text-slate-500">Portfólio de Programas e Entregas</p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-4">
+            <div id="slide-counter" class="hidden md:flex items-center gap-2 bg-slate-100 rounded-full px-4 py-2">
+              <span class="text-sm text-slate-600">Slide</span>
+              <span id="current-slide" class="title-font font-bold text-sky-600">1</span>
+              <span class="text-slate-400">/</span>
+              <span id="total-slides" class="text-slate-600">16</span>
+            </div>
+
+            <!-- Progress Bar -->
+            <div id="progress-container" class="hidden sm:block w-32 h-2 bg-slate-200 rounded-full overflow-hidden">
+              <div id="progress-bar" class="progress-bar h-full section-badge rounded-full" style="width: 6.25%"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Navigation Menu -->
+        <div class="flex items-center gap-2 overflow-x-auto pb-2">
+          <button onclick="switchView('presentation')" id="nav-presentation"
+            class="nav-tab px-4 py-2 rounded-lg font-medium text-sm whitespace-nowrap bg-sky-100 text-sky-700 border-2 border-sky-500 transition-all">
+            📊 Apresentação
+          </button>
+          <button onclick="switchView('pricing')" id="nav-pricing"
+            class="nav-tab px-4 py-2 rounded-lg font-medium text-sm whitespace-nowrap bg-slate-100 text-slate-600 border-2 border-transparent hover:bg-slate-200 transition-all">
+            ⚖️ Compare
+          </button>
+          <button onclick="switchView('sales')" id="nav-sales"
+            class="nav-tab px-4 py-2 rounded-lg font-medium text-sm whitespace-nowrap bg-slate-100 text-slate-600 border-2 border-transparent hover:bg-slate-200 transition-all">
+            🚀 Decolar!
+          </button>
+
+          <div class="ml-auto hidden lg:flex items-center gap-2">
+            <button onclick="prevSlide()" class="px-3 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-medium transition-all">
+              ◀
+            </button>
+            <button onclick="nextSlide()" class="px-3 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-medium transition-all">
+              ▶
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Slides Container -->
+    <main id="presentation-view" class="flex-1 overflow-y-auto">
+      <div class="h-full">
+
+        <!-- SLIDE 1 - Cover -->
+        <section class="slide active h-full flex-col items-center justify-center p-6 md:p-12" data-slide="1">
+          <div class="max-w-4xl mx-auto text-center">
+            <div class="animate-scale mb-8">
+              <div class="w-24 h-24 mx-auto rounded-3xl section-badge flex items-center justify-center mb-6 animate-pulse-slow">
+                <svg class="w-14 h-14 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                    d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                </svg>
+              </div>
+            </div>
+
+            <h1 id="main-title" class="title-font text-4xl md:text-6xl font-bold text-slate-800 mb-4 animate-slide-left delay-1">
+              Portfólio de Programas e Entregas
+            </h1>
+            <h2 class="title-font text-2xl md:text-3xl font-semibold gradient-text mb-6 animate-slide-right delay-2">
+              INBATEC
+            </h2>
+            <p id="main-subtitle" class="text-lg md:text-xl text-slate-600 max-w-2xl mx-auto animate-slide-left delay-3">
+              Existem ideias boas morrendo todos os dias por falta de estrutura — a INBATEC existe para evitar isso
+            </p>
+
+            <div class="flex items-center justify-center gap-6 mt-12 animate-scale delay-4">
+              <div class="flex items-center gap-2 px-4 py-2 bg-white rounded-full shadow-sm border border-slate-200">
+                <div class="w-3 h-3 rounded-full bg-sky-500"></div>
+                <span class="text-sm text-slate-600">Inbatec</span>
+              </div>
+              <div class="flex items-center gap-2 px-4 py-2 bg-white rounded-full shadow-sm border border-slate-200">
+                <div class="w-3 h-3 rounded-full bg-violet-500"></div>
+                <span class="text-sm text-slate-600">Parque Tecnológico</span>
+              </div>
+              <div class="flex items-center gap-2 px-4 py-2 bg-white rounded-full shadow-sm border border-slate-200">
+                <div class="w-3 h-3 rounded-full bg-pink-500"></div>
+                <span class="text-sm text-slate-600">UFLA</span>
+              </div>
+            </div>
+
+            <button onclick="goToSlide(2)"
+              class="mt-12 animate-scale delay-5 group flex items-center gap-2 mx-auto px-6 py-3 bg-slate-800 hover:bg-slate-700 text-white rounded-full transition-all">
+              <span>Começar Apresentação</span>
+              <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </button>
+          </div>
+        </section>
+
+        <!-- SLIDE 2 - Why Inbatec -->
+        <section class="slide h-full flex-col p-6 md:p-12" data-slide="2">
+          <div class="max-w-5xl mx-auto w-full">
+            <div class="flex items-center gap-3 mb-8 animate-slide-left">
+              <span class="px-3 py-1 text-xs font-semibold text-white rounded-full section-badge">POR QUE INBATEC?</span>
+              <div class="h-px flex-1 bg-gradient-to-r from-sky-200 to-transparent"></div>
+            </div>
+
+            <h2 class="title-font text-3xl md:text-4xl font-bold text-slate-800 mb-8 animate-slide-left delay-1">
+              Crescer com método reduz risco e acelera decisões
+            </h2>
+
+            <div class="space-y-4">
+              <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 flex items-start gap-4 card-hover animate-slide-left delay-2">
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-sky-500 to-sky-600 flex items-center justify-center flex-shrink-0">
+                  <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="font-semibold text-slate-800 mb-1">Ideia boa não vira empresa sem execução</h3>
+                  <p class="text-slate-600">
+                    Estrutura, validação e governança normalmente separam “projeto” de “negócio”. A Inbatec organiza o caminho com método, rede e acompanhamento.
+                  </p>
+                </div>
+              </div>
+
+              <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 flex items-start gap-4 card-hover animate-slide-right delay-3">
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-violet-500 to-violet-600 flex items-center justify-center flex-shrink-0">
+                  <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="font-semibold text-slate-800 mb-1">Investimento que compra clareza e tração</h3>
+                  <p class="text-slate-600">
+                    O programa foca em decisões que impactam mercado: proposta de valor, modelo de negócios, estratégia comercial e preparação para captação/editais.
+                  </p>
+                </div>
+              </div>
+
+              <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 flex items-start gap-4 card-hover animate-slide-left delay-4">
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-pink-500 to-pink-600 flex items-center justify-center flex-shrink-0">
+                  <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="font-semibold text-slate-800 mb-1">Rede e acesso ao ecossistema</h3>
+                  <p class="text-slate-600">
+                    Conexões com mentores, especialistas e oportunidades para reduzir curva de aprendizado e aumentar a qualidade das decisões.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- SLIDE 3 - Diferencial Inbatec -->
+        <section class="slide h-full flex-col p-6 md:p-12" data-slide="3">
+          <div class="max-w-5xl mx-auto w-full">
+            <div class="flex items-center gap-3 mb-8 animate-slide-left">
+              <span class="px-3 py-1 text-xs font-semibold text-white rounded-full section-badge">NOSSO DIFERENCIAL</span>
+              <div class="h-px flex-1 bg-gradient-to-r from-sky-200 to-transparent"></div>
+            </div>
+
+            <h2 class="title-font text-3xl md:text-4xl font-bold text-slate-800 mb-8 animate-slide-left delay-1">
+              Por que a Inbatec é diferente
+            </h2>
+
+            <div class="grid md:grid-cols-2 gap-6">
+              <div class="bg-gradient-to-br from-sky-50 to-blue-50 rounded-2xl p-6 border border-sky-200 animate-slide-left delay-2">
+                <h3 class="font-semibold text-slate-800 mb-4 flex items-center gap-2">
+                  <span class="w-8 h-8 rounded-lg bg-sky-500 flex items-center justify-center text-white font-bold text-sm">✓</span>
+                  Contextualizada localmente
+                </h3>
+                <ul class="space-y-3">
+                  <li class="flex items-center gap-3 text-slate-700"><div class="w-2 h-2 rounded-full bg-sky-500"></div><span>Mentores que entendem o mercado local</span></li>
+                  <li class="flex items-center gap-3 text-slate-700"><div class="w-2 h-2 rounded-full bg-sky-500"></div><span>Rede de empresas e parceiros na região</span></li>
+                  <li class="flex items-center gap-3 text-slate-700"><div class="w-2 h-2 rounded-full bg-sky-500"></div><span>Acesso direto a oportunidades regionais</span></li>
+                </ul>
+              </div>
+
+              <div class="bg-gradient-to-br from-violet-50 to-purple-50 rounded-2xl p-6 border border-violet-200 animate-slide-right delay-2">
+                <h3 class="font-semibold text-slate-800 mb-4 flex items-center gap-2">
+                  <span class="w-8 h-8 rounded-lg bg-violet-500 flex items-center justify-center text-white font-bold text-sm">✓</span>
+                  Método estruturado
+                </h3>
+                <ul class="space-y-3">
+                  <li class="flex items-center gap-3 text-slate-700"><div class="w-2 h-2 rounded-full bg-violet-500"></div><span>Diagnóstico por prontidão (TRL/CRL/TMRL/BRL)</span></li>
+                  <li class="flex items-center gap-3 text-slate-700"><div class="w-2 h-2 rounded-full bg-violet-500"></div><span>Plano de execução por ciclos e prioridades</span></li>
+                  <li class="flex items-center gap-3 text-slate-700"><div class="w-2 h-2 rounded-full bg-violet-500"></div><span>Checkpoints e radar de evolução</span></li>
+                </ul>
+              </div>
+
+              <div class="bg-gradient-to-br from-pink-50 to-rose-50 rounded-2xl p-6 border border-pink-200 animate-slide-left delay-3">
+                <h3 class="font-semibold text-slate-800 mb-4 flex items-center gap-2">
+                  <span class="w-8 h-8 rounded-lg bg-pink-500 flex items-center justify-center text-white font-bold text-sm">✓</span>
+                  Histórico e credibilidade
+                </h3>
+                <ul class="space-y-3">
+                  <li class="flex items-center gap-3 text-slate-700"><div class="w-2 h-2 rounded-full bg-pink-500"></div><span>Portfólio de startups apoiadas e graduadas (cases sob demanda)</span></li>
+                  <li class="flex items-center gap-3 text-slate-700"><div class="w-2 h-2 rounded-full bg-pink-500"></div><span>Evolução medida por critérios claros (maturidade, mercado, governança)</span></li>
+                  <li class="flex items-center gap-3 text-slate-700"><div class="w-2 h-2 rounded-full bg-pink-500"></div><span>Foco em validação e sustentabilidade (não só “ideia”)</span></li>
+                </ul>
+              </div>
+
+              <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-6 border border-green-200 animate-slide-right delay-3">
+                <h3 class="font-semibold text-slate-800 mb-4 flex items-center gap-2">
+                  <span class="w-8 h-8 rounded-lg bg-green-500 flex items-center justify-center text-white font-bold text-sm">✓</span>
+                  Modelo de custo acessível e previsível
+                </h3>
+                <ul class="space-y-3">
+                  <li class="flex items-center gap-3 text-slate-700"><div class="w-2 h-2 rounded-full bg-green-500"></div><span>Modalidades flexíveis (virtual/presencial)</span></li>
+                  <li class="flex items-center gap-3 text-slate-700"><div class="w-2 h-2 rounded-full bg-green-500"></div><span>Escopo claro e acompanhamento contínuo</span></li>
+                  <li class="flex items-center gap-3 text-slate-700"><div class="w-2 h-2 rounded-full bg-green-500"></div><span>Comparativo de investimento apresentado de forma transparente (ver aba Compare)</span></li>
+                </ul>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+        <!-- SLIDE 4 - Overview -->
+        <section class="slide h-full flex-col p-6 md:p-12" data-slide="4">
+          <div class="max-w-5xl mx-auto w-full">
+            <div class="flex items-center gap-3 mb-8 animate-slide-left">
+              <span class="px-3 py-1 text-xs font-semibold text-white rounded-full section-badge">VISÃO GERAL</span>
+              <div class="h-px flex-1 bg-gradient-to-r from-sky-200 to-transparent"></div>
+            </div>
+
+            <h2 class="title-font text-3xl md:text-4xl font-bold text-slate-800 mb-4 animate-slide-left delay-1">
+              Macroportfólio da Inbatec
+            </h2>
+            <p class="text-slate-600 mb-8 animate-slide-left delay-1">📌 Três frentes que se conectam (pipeline completo)</p>
+
+            <div class="grid md:grid-cols-3 gap-6">
+              <button onclick="goToSlide(5)" class="text-left bg-gradient-to-br from-sky-500 to-sky-600 rounded-2xl p-6 text-white card-hover animate-slide-left delay-2">
+                <div class="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center mb-4"><span class="text-2xl font-bold">1</span></div>
+                <h3 class="font-bold text-lg mb-2">Programa de Incubação Tecnológica</h3>
+                <p class="text-sky-100 text-sm">Transformação de projetos em empresas</p>
+                <div class="mt-4 flex items-center gap-2 text-sky-100 text-sm">
+                  <span>Ver detalhes</span>
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                </div>
+              </button>
+
+              <button onclick="goToSlide(10)" class="text-left bg-gradient-to-br from-violet-500 to-violet-600 rounded-2xl p-6 text-white card-hover animate-scale delay-3">
+                <div class="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center mb-4"><span class="text-2xl font-bold">2</span></div>
+                <h3 class="font-bold text-lg mb-2">Programa de Pré-Incubação / Ideação</h3>
+                <p class="text-violet-100 text-sm">Porta de entrada qualificada</p>
+                <div class="mt-4 flex items-center gap-2 text-violet-100 text-sm">
+                  <span>Ver detalhes</span>
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                </div>
+              </button>
+
+              <button onclick="goToSlide(14)" class="text-left bg-gradient-to-br from-pink-500 to-pink-600 rounded-2xl p-6 text-white card-hover animate-slide-right delay-4">
+                <div class="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center mb-4"><span class="text-2xl font-bold">3</span></div>
+                <h3 class="font-bold text-lg mb-2">Serviços Tecnológicos e de Inovação</h3>
+                <p class="text-pink-100 text-sm">Sustentabilidade financeira + parcerias</p>
+                <div class="mt-4 flex items-center gap-2 text-pink-100 text-sm">
+                  <span>Ver detalhes</span>
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                </div>
+              </button>
+            </div>
+
+            <p class="text-center text-slate-500 mt-8 animate-scale delay-5">
+              Cada frente tem entregas claras, critérios de entrada e resultados esperados.
+            </p>
+          </div>
+        </section>
+
+        <!-- SLIDE 5 - Product 1 Intro -->
+        <section class="slide h-full flex-col p-6 md:p-12" data-slide="5">
+          <div class="max-w-5xl mx-auto w-full">
+            <div class="flex items-center gap-3 mb-8 animate-slide-left">
+              <span class="px-3 py-1 text-xs font-semibold text-white rounded-full bg-sky-500">PRODUTO 1</span>
+              <div class="h-px flex-1 bg-gradient-to-r from-sky-200 to-transparent"></div>
+            </div>
+
+            <h2 class="title-font text-3xl md:text-4xl font-bold text-slate-800 mb-2 animate-slide-left delay-1">
+              Programa de Incubação Tecnológica
+            </h2>
+            <p class="text-sky-600 font-medium mb-8 animate-slide-left delay-1">O principal produto institucional da Inbatec</p>
+
+            <div class="grid md:grid-cols-2 gap-6">
+              <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 animate-slide-left delay-2">
+                <div class="w-12 h-12 rounded-xl bg-sky-100 flex items-center justify-center mb-4">
+                  <svg class="w-6 h-6 text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                  </svg>
+                </div>
+                <h3 class="font-semibold text-slate-800 mb-3">Público-alvo</h3>
+                <ul class="space-y-2">
+                  <li class="flex items-center gap-2 text-slate-600"><div class="w-1.5 h-1.5 rounded-full bg-sky-500"></div> Negócios nascidos da academia</li>
+                  <li class="flex items-center gap-2 text-slate-600"><div class="w-1.5 h-1.5 rounded-full bg-sky-500"></div> Inovação em qualquer setor</li>
+                  <li class="flex items-center gap-2 text-slate-600"><div class="w-1.5 h-1.5 rounded-full bg-sky-500"></div> Pesquisadores, docentes e empreendedores</li>
+                </ul>
+              </div>
+
+              <div class="bg-gradient-to-br from-sky-50 to-violet-50 rounded-2xl p-6 border border-sky-100 animate-slide-right delay-3">
+                <div class="w-12 h-12 rounded-xl bg-white flex items-center justify-center mb-4 shadow-sm">
+                  <svg class="w-6 h-6 text-violet-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                  </svg>
+                </div>
+                <h3 class="font-semibold text-slate-800 mb-3">Problema que resolve</h3>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                  Projetos tecnológicos travam ao sair da pesquisa para o mercado por lacunas em: proposta de valor, cliente, modelo de negócio, governança, captação e go-to-market.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SLIDE 6 - Value Proposition -->
+        <section class="slide h-full flex-col p-6 md:p-12" data-slide="6">
+          <div class="max-w-5xl mx-auto w-full">
+            <div class="flex items-center gap-3 mb-8 animate-slide-left">
+              <span class="px-3 py-1 text-xs font-semibold text-white rounded-full bg-sky-500">PRODUTO 1</span>
+              <span class="text-slate-400">•</span>
+              <span class="text-sm text-slate-600">Proposta de Valor</span>
+            </div>
+
+            <h2 class="title-font text-3xl md:text-4xl font-bold text-slate-800 mb-8 animate-slide-left delay-1">
+              O que a incubação entrega
+            </h2>
+
+            <div class="space-y-4">
+              <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 flex items-start gap-4 card-hover animate-slide-left delay-2">
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-sky-500 to-sky-600 flex items-center justify-center flex-shrink-0">
+                  <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="font-semibold text-slate-800 mb-1">Transformação</h3>
+                  <p class="text-slate-600">Da validação para operação</p>
+                </div>
+              </div>
+
+              <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 flex items-start gap-4 card-hover animate-slide-right delay-3">
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-violet-500 to-violet-600 flex items-center justify-center flex-shrink-0">
+                  <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="font-semibold text-slate-800 mb-1">Estruturação</h3>
+                  <p class="text-slate-600">Processos, modelo de negócio e estratégia</p>
+                </div>
+              </div>
+
+              <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 flex items-start gap-4 card-hover animate-slide-left delay-4">
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-pink-500 to-pink-600 flex items-center justify-center flex-shrink-0">
+                  <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="font-semibold text-slate-800 mb-1">Acesso</h3>
+                  <p class="text-slate-600">Rede, visibilidade e oportunidades (editais/parcerias)</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SLIDE 7 - Components -->
+        <section class="slide h-full flex-col p-6 md:p-12" data-slide="7">
+          <div class="max-w-5xl mx-auto w-full">
+            <div class="flex items-center gap-3 mb-8 animate-slide-left">
+              <span class="px-3 py-1 text-xs font-semibold text-white rounded-full bg-sky-500">PRODUTO 1</span>
+              <span class="text-slate-400">•</span>
+              <span class="text-sm text-slate-600">Componentes</span>
+            </div>
+
+            <h2 class="title-font text-3xl md:text-4xl font-bold text-slate-800 mb-8 animate-slide-left delay-1">
+              Como o programa funciona
+            </h2>
+
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+              <div class="bg-white rounded-xl p-4 shadow-sm border border-slate-200 text-center card-hover animate-scale delay-1">
+                <div class="w-10 h-10 rounded-lg bg-sky-100 flex items-center justify-center mx-auto mb-3"><span class="text-sky-600 font-bold">1</span></div>
+                <h4 class="font-medium text-slate-800 text-sm">Diagnóstico inicial</h4>
+                <p class="text-xs text-slate-500 mt-1">TRL, CRL, TMRL, BRL</p>
+              </div>
+
+              <div class="bg-white rounded-xl p-4 shadow-sm border border-slate-200 text-center card-hover animate-scale delay-2">
+                <div class="w-10 h-10 rounded-lg bg-sky-100 flex items-center justify-center mx-auto mb-3"><span class="text-sky-600 font-bold">2</span></div>
+                <h4 class="font-medium text-slate-800 text-sm">Plano de execução</h4>
+                <p class="text-xs text-slate-500 mt-1">Ciclos periódicos + revisão</p>
+              </div>
+
+              <div class="bg-white rounded-xl p-4 shadow-sm border border-slate-200 text-center card-hover animate-scale delay-3">
+                <div class="w-10 h-10 rounded-lg bg-violet-100 flex items-center justify-center mx-auto mb-3"><span class="text-violet-600 font-bold">3</span></div>
+                <h4 class="font-medium text-slate-800 text-sm">Capacitações</h4>
+                <p class="text-xs text-slate-500 mt-1">Por eixo</p>
+              </div>
+
+              <div class="bg-white rounded-xl p-4 shadow-sm border border-slate-200 text-center card-hover animate-scale delay-4">
+                <div class="w-10 h-10 rounded-lg bg-violet-100 flex items-center justify-center mx-auto mb-3"><span class="text-violet-600 font-bold">4</span></div>
+                <h4 class="font-medium text-slate-800 text-sm">Mentorias</h4>
+                <p class="text-xs text-slate-500 mt-1">Técnicas e de negócio</p>
+              </div>
+
+              <div class="bg-white rounded-xl p-4 shadow-sm border border-slate-200 text-center card-hover animate-scale delay-5">
+                <div class="w-10 h-10 rounded-lg bg-pink-100 flex items-center justify-center mx-auto mb-3"><span class="text-pink-600 font-bold">5</span></div>
+                <h4 class="font-medium text-slate-800 text-sm">Monitoramento</h4>
+                <p class="text-xs text-slate-500 mt-1">Monitoramento e checkpoints</p>
+              </div>
+
+              <div class="bg-white rounded-xl p-4 shadow-sm border border-slate-200 text-center card-hover animate-scale delay-5">
+                <div class="w-10 h-10 rounded-lg bg-pink-100 flex items-center justify-center mx-auto mb-3"><span class="text-pink-600 font-bold">6</span></div>
+                <h4 class="font-medium text-slate-800 text-sm">Governança</h4>
+                <p class="text-xs text-slate-500 mt-1">Critérios e preparação para graduação</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SLIDE 8 - Graduation Criteria -->
+        <section class="slide h-full flex-col p-6 md:p-12" data-slide="8">
+          <div class="max-w-5xl mx-auto w-full">
+            <div class="flex items-center gap-3 mb-8 animate-slide-left">
+              <span class="px-3 py-1 text-xs font-semibold text-white rounded-full bg-sky-500">PRODUTO 1</span>
+              <span class="text-slate-400">•</span>
+              <span class="text-sm text-slate-600">Critério de Conclusão</span>
+            </div>
+
+            <h2 class="title-font text-3xl md:text-4xl font-bold text-slate-800 mb-8 animate-slide-left delay-1">
+              Quando uma startup se gradua
+            </h2>
+
+            <div class="bg-gradient-to-br from-sky-50 to-violet-50 rounded-2xl p-6 border border-sky-100 mb-6 animate-scale delay-2">
+              <p class="text-slate-700 font-medium mb-0">🎓 Graduação = quando a empresa já opera com base mínima de mercado e gestão.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div class="bg-white rounded-xl p-4 shadow-sm border border-slate-200 animate-slide-left delay-2">
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center">
+                    <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h4 class="font-semibold text-slate-800 text-sm">TRL (referência)</h4>
+                    <p class="text-xs text-slate-500">Protótipo validado em ambiente relevante</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bg-white rounded-xl p-4 shadow-sm border border-slate-200 animate-slide-right delay-3">
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center">
+                    <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h4 class="font-semibold text-slate-800 text-sm">Tração comercial</h4>
+                    <p class="text-xs text-slate-500">Vendas ou contratos (quando aplicável)</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bg-white rounded-xl p-4 shadow-sm border border-slate-200 animate-slide-left delay-4">
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center">
+                    <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h4 class="font-semibold text-slate-800 text-sm">Gestão financeira</h4>
+                    <p class="text-xs text-slate-500">Base organizada</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bg-white rounded-xl p-4 shadow-sm border border-slate-200 animate-slide-right delay-5">
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center">
+                    <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h4 class="font-semibold text-slate-800 text-sm">Modelo de negócio</h4>
+                    <p class="text-xs text-slate-500">Claro e validado</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bg-white rounded-xl p-4 shadow-sm border border-slate-200 animate-slide-left delay-5">
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center">
+                    <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h4 class="font-semibold text-slate-800 text-sm">Segurança jurídica</h4>
+                    <p class="text-xs text-slate-500">Mínimo operacional</p>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+        <!-- SLIDE 9 - Indicators -->
+        <section class="slide h-full flex-col p-6 md:p-12" data-slide="9">
+          <div class="max-w-5xl mx-auto w-full">
+            <div class="flex items-center gap-3 mb-8 animate-slide-left">
+              <span class="px-3 py-1 text-xs font-semibold text-white rounded-full bg-sky-500">PRODUTO 1</span>
+              <span class="text-slate-400">•</span>
+              <span class="text-sm text-slate-600">Indicadores</span>
+            </div>
+
+            <h2 class="title-font text-3xl md:text-4xl font-bold text-slate-800 mb-8 animate-slide-left delay-1">
+              Como medimos sucesso
+            </h2>
+
+            <div class="grid md:grid-cols-2 gap-6">
+              <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 card-hover animate-slide-left delay-2">
+                <div class="flex items-center justify-between mb-4">
+                  <div class="w-12 h-12 rounded-xl bg-sky-100 flex items-center justify-center">
+                    <svg class="w-6 h-6 text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    </svg>
+                  </div>
+                  <span class="text-2xl font-bold text-sky-600">🎯</span>
+                </div>
+                <h3 class="font-semibold text-slate-800">Taxa de conclusão do ciclo</h3>
+                <p class="text-sm text-slate-500 mt-1">Conclusão do programa conforme critérios definidos</p>
+              </div>
+
+              <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 card-hover animate-slide-right delay-3">
+                <div class="flex items-center justify-between mb-4">
+                  <div class="w-12 h-12 rounded-xl bg-violet-100 flex items-center justify-center">
+                    <svg class="w-6 h-6 text-violet-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                    </svg>
+                  </div>
+                  <span class="text-2xl font-bold text-violet-600">📈</span>
+                </div>
+                <h3 class="font-semibold text-slate-800">Evolução de maturidade</h3>
+                <p class="text-sm text-slate-500 mt-1">Evolução por dimensões (Radar)</p>
+              </div>
+
+              <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 card-hover animate-slide-left delay-4">
+                <div class="flex items-center justify-between mb-4">
+                  <div class="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center">
+                    <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                  </div>
+                  <span class="text-2xl font-bold text-green-600">🛡️</span>
+                </div>
+                <h3 class="font-semibold text-slate-800">Sustentação pós-programa</h3>
+                <p class="text-sm text-slate-500 mt-1">Acompanhamento quando medido</p>
+              </div>
+
+              <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 card-hover animate-slide-right delay-5">
+                <div class="flex items-center justify-between mb-4">
+                  <div class="w-12 h-12 rounded-xl bg-pink-100 flex items-center justify-center">
+                    <svg class="w-6 h-6 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <span class="text-2xl font-bold text-pink-600">💼</span>
+                </div>
+                <h3 class="font-semibold text-slate-800">Tração comercial</h3>
+                <p class="text-sm text-slate-500 mt-1">Receita/contratos quando aplicável</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SLIDE 10 - Product 2 Intro -->
+        <section class="slide h-full flex-col p-6 md:p-12" data-slide="10">
+          <div class="max-w-5xl mx-auto w-full">
+            <div class="flex items-center gap-3 mb-8 animate-slide-left">
+              <span class="px-3 py-1 text-xs font-semibold text-white rounded-full bg-violet-500">PRODUTO 2</span>
+              <div class="h-px flex-1 bg-gradient-to-r from-violet-200 to-transparent"></div>
+            </div>
+
+            <h2 class="title-font text-3xl md:text-4xl font-bold text-slate-800 mb-2 animate-slide-left delay-1">
+              Programa de Pré-Incubação / Ideação
+            </h2>
+            <p class="text-violet-600 font-medium mb-8 animate-slide-left delay-1">
+              Porta de entrada qualificada (pipeline)
+            </p>
+
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 animate-scale delay-2">
+              <div class="w-12 h-12 rounded-xl bg-violet-100 flex items-center justify-center mb-4">
+                <svg class="w-6 h-6 text-violet-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+              </div>
+              <h3 class="font-semibold text-slate-800 mb-4">Público-alvo</h3>
+              <div class="flex flex-wrap gap-3">
+                <span class="px-4 py-2 bg-violet-50 text-violet-700 rounded-full text-sm font-medium">Potenciais empreendedores</span>
+                <span class="px-4 py-2 bg-violet-50 text-violet-700 rounded-full text-sm font-medium">Estudantes</span>
+                <span class="px-4 py-2 bg-violet-50 text-violet-700 rounded-full text-sm font-medium">Pesquisadores</span>
+                <span class="px-4 py-2 bg-violet-50 text-violet-700 rounded-full text-sm font-medium">Docentes</span>
+                <span class="px-4 py-2 bg-violet-50 text-violet-700 rounded-full text-sm font-medium">Ideias em fase inicial</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SLIDE 11 - Pre-Incubation Value -->
+        <section class="slide h-full flex-col p-6 md:p-12" data-slide="11">
+          <div class="max-w-5xl mx-auto w-full">
+            <div class="flex items-center gap-3 mb-8 animate-slide-left">
+              <span class="px-3 py-1 text-xs font-semibold text-white rounded-full bg-violet-500">PRODUTO 2</span>
+              <span class="text-slate-400">•</span>
+              <span class="text-sm text-slate-600">Proposta de Valor</span>
+            </div>
+
+            <h2 class="title-font text-3xl md:text-4xl font-bold text-slate-800 mb-8 animate-slide-left delay-1">
+              O que resolve
+            </h2>
+
+            <div class="space-y-4">
+              <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 flex items-start gap-4 card-hover animate-slide-left delay-2">
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-violet-500 to-violet-600 flex items-center justify-center flex-shrink-0">
+                  <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="font-semibold text-slate-800 mb-1">Evita entrar na incubação sem base</h3>
+                  <p class="text-slate-600">Critérios mínimos para reduzir risco e desperdício de energia</p>
+                </div>
+              </div>
+
+              <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 flex items-start gap-4 card-hover animate-slide-right delay-3">
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-pink-500 to-pink-600 flex items-center justify-center flex-shrink-0">
+                  <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="font-semibold text-slate-800 mb-1">Estrutura a oportunidade e o pitch</h3>
+                  <p class="text-slate-600">Problema, cliente, proposta de valor e narrativa</p>
+                </div>
+              </div>
+
+              <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 flex items-start gap-4 card-hover animate-slide-left delay-4">
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-sky-500 to-sky-600 flex items-center justify-center flex-shrink-0">
+                  <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="font-semibold text-slate-800 mb-1">Plano mínimo de validação</h3>
+                  <p class="text-slate-600">Cliente/problema/solução com próximos passos</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SLIDE 12 - Pre-Incubation Components -->
+        <section class="slide h-full flex-col p-6 md:p-12" data-slide="12">
+          <div class="max-w-5xl mx-auto w-full">
+            <div class="flex items-center gap-3 mb-8 animate-slide-left">
+              <span class="px-3 py-1 text-xs font-semibold text-white rounded-full bg-violet-500">PRODUTO 2</span>
+              <span class="text-slate-400">•</span>
+              <span class="text-sm text-slate-600">Componentes</span>
+            </div>
+
+            <h2 class="title-font text-3xl md:text-4xl font-bold text-slate-800 mb-8 animate-slide-left delay-1">
+              O que o programa entrega
+            </h2>
+
+            <div class="grid md:grid-cols-2 gap-6">
+              <div class="space-y-4">
+                <div class="bg-white rounded-xl p-4 shadow-sm border border-slate-200 flex items-center gap-4 animate-slide-left delay-2">
+                  <div class="w-10 h-10 rounded-lg bg-violet-100 flex items-center justify-center flex-shrink-0"><span class="text-violet-600 font-bold">1</span></div>
+                  <span class="text-slate-700">Sensibilização e cultura empreendedora</span>
+                </div>
+                <div class="bg-white rounded-xl p-4 shadow-sm border border-slate-200 flex items-center gap-4 animate-slide-left delay-3">
+                  <div class="w-10 h-10 rounded-lg bg-violet-100 flex items-center justify-center flex-shrink-0"><span class="text-violet-600 font-bold">2</span></div>
+                  <span class="text-slate-700">Qualificação técnica e de negócio</span>
+                </div>
+                <div class="bg-white rounded-xl p-4 shadow-sm border border-slate-200 flex items-center gap-4 animate-slide-left delay-4">
+                  <div class="w-10 h-10 rounded-lg bg-violet-100 flex items-center justify-center flex-shrink-0"><span class="text-violet-600 font-bold">3</span></div>
+                  <span class="text-slate-700">Estruturação da ideia</span>
+                </div>
+                <div class="bg-white rounded-xl p-4 shadow-sm border border-slate-200 flex items-center gap-4 animate-slide-left delay-5">
+                  <div class="w-10 h-10 rounded-lg bg-violet-100 flex items-center justify-center flex-shrink-0"><span class="text-violet-600 font-bold">4</span></div>
+                  <span class="text-slate-700">Diagnóstico de prontidão</span>
+                </div>
+              </div>
+
+              <div class="bg-gradient-to-br from-violet-50 to-pink-50 rounded-2xl p-6 border border-violet-100 animate-slide-right delay-3">
+                <h3 class="font-semibold text-slate-800 mb-4 flex items-center gap-2">
+                  <svg class="w-5 h-5 text-violet-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 9l3 3m0 0l-3 3m3-3H8m13 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  Encaminhamento claro
+                </h3>
+
+                <div class="space-y-3">
+                  <div class="flex items-center gap-3 p-3 bg-white rounded-lg">
+                    <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center">
+                      <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                      </svg>
+                    </div>
+                    <span class="text-slate-700 font-medium">Incubar</span>
+                  </div>
+
+                  <div class="flex items-center gap-3 p-3 bg-white rounded-lg">
+                    <div class="w-8 h-8 rounded-full bg-yellow-100 flex items-center justify-center">
+                      <svg class="w-4 h-4 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                      </svg>
+                    </div>
+                    <span class="text-slate-700 font-medium">Qualificar novamente</span>
+                  </div>
+
+                  <div class="flex items-center gap-3 p-3 bg-white rounded-lg">
+                    <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center">
+                      <svg class="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </div>
+                    <span class="text-slate-700 font-medium">Revisar escopo / Pivotar</span>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SLIDE 13 - Pre-Incubation Indicators -->
+        <section class="slide h-full flex-col p-6 md:p-12" data-slide="13">
+          <div class="max-w-5xl mx-auto w-full">
+            <div class="flex items-center gap-3 mb-8 animate-slide-left">
+              <span class="px-3 py-1 text-xs font-semibold text-white rounded-full bg-violet-500">PRODUTO 2</span>
+              <span class="text-slate-400">•</span>
+              <span class="text-sm text-slate-600">Critério e Indicadores</span>
+            </div>
+
+            <h2 class="title-font text-3xl md:text-4xl font-bold text-slate-800 mb-8 animate-slide-left delay-1">
+              Critério de Conclusão e Indicadores
+            </h2>
+
+            <div class="grid md:grid-cols-2 gap-6">
+              <div class="bg-gradient-to-br from-violet-500 to-violet-600 rounded-2xl p-6 text-white animate-slide-left delay-2">
+                <div class="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center mb-4">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <h3 class="font-semibold text-lg mb-2">Conclusão</h3>
+                <p class="text-violet-100">Ideia apta a submeter ao edital de incubação</p>
+              </div>
+
+              <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 animate-slide-right delay-3">
+                <h3 class="font-semibold text-slate-800 mb-4">Indicadores</h3>
+                <ul class="space-y-3">
+                  <li class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-violet-100 flex items-center justify-center"><span class="text-violet-600 font-bold text-sm">#</span></div>
+                    <span class="text-slate-600">Nº de ideias qualificadas</span>
+                  </li>
+                  <li class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center"><span class="text-green-600 font-bold text-sm">%</span></div>
+                    <span class="text-slate-600">Taxa de evolução (pré → incubação)</span>
+                  </li>
+                  <li class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-pink-100 flex items-center justify-center">
+                      <svg class="w-4 h-4 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6" />
+                      </svg>
+                    </div>
+                    <span class="text-slate-600">Aumento de qualidade nas submissões</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SLIDE 14 - Product 3 Intro -->
+        <section class="slide h-full flex-col p-6 md:p-12" data-slide="14">
+          <div class="max-w-5xl mx-auto w-full">
+            <div class="flex items-center gap-3 mb-8 animate-slide-left">
+              <span class="px-3 py-1 text-xs font-semibold text-white rounded-full bg-pink-500">PRODUTO 3</span>
+              <div class="h-px flex-1 bg-gradient-to-r from-pink-200 to-transparent"></div>
+            </div>
+
+            <h2 class="title-font text-3xl md:text-4xl font-bold text-slate-800 mb-2 animate-slide-left delay-1">
+              Serviços Tecnológicos e de Inovação
+            </h2>
+            <p class="text-pink-600 font-medium mb-8 animate-slide-left delay-1">
+              Serviços contratáveis + base de sustentabilidade financeira
+            </p>
+
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 animate-scale delay-2">
+              <div class="w-12 h-12 rounded-xl bg-pink-100 flex items-center justify-center mb-4">
+                <svg class="w-6 h-6 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+              </div>
+
+              <h3 class="font-semibold text-slate-800 mb-4">Público-alvo</h3>
+              <div class="flex flex-wrap gap-3">
+                <span class="px-4 py-2 bg-pink-50 text-pink-700 rounded-full text-sm font-medium">Empresas</span>
+                <span class="px-4 py-2 bg-pink-50 text-pink-700 rounded-full text-sm font-medium">ICTs</span>
+                <span class="px-4 py-2 bg-pink-50 text-pink-700 rounded-full text-sm font-medium">Prefeituras</span>
+                <span class="px-4 py-2 bg-pink-50 text-pink-700 rounded-full text-sm font-medium">Órgãos públicos</span>
+                <span class="px-4 py-2 bg-pink-50 text-pink-700 rounded-full text-sm font-medium">Startups externas</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SLIDE 15 - Services Value -->
+        <section class="slide h-full flex-col p-6 md:p-12" data-slide="15">
+          <div class="max-w-5xl mx-auto w-full">
+            <div class="flex items-center gap-3 mb-8 animate-slide-left">
+              <span class="px-3 py-1 text-xs font-semibold text-white rounded-full bg-pink-500">PRODUTO 3</span>
+              <span class="text-slate-400">•</span>
+              <span class="text-sm text-slate-600">Proposta de Valor</span>
+            </div>
+
+            <h2 class="title-font text-3xl md:text-4xl font-bold text-slate-800 mb-8 animate-slide-left delay-1">
+              Serviços contratáveis (para empresas e instituições)
+            </h2>
+
+            <div class="grid md:grid-cols-2 gap-4">
+              <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 flex items-start gap-4 card-hover animate-slide-left delay-2">
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-pink-500 to-pink-600 flex items-center justify-center flex-shrink-0">
+                  <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="font-semibold text-slate-800 mb-1">Diagnóstico e jornada de inovação</h3>
+                  <p class="text-slate-600 text-sm">Processo + plano de ação com priorização</p>
+                </div>
+              </div>
+
+              <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 flex items-start gap-4 card-hover animate-slide-right delay-3">
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-violet-500 to-violet-600 flex items-center justify-center flex-shrink-0">
+                  <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="font-semibold text-slate-800 mb-1">Projetos e editais</h3>
+                  <p class="text-slate-600 text-sm">Do escopo à submissão (técnico + negócio)</p>
+                </div>
+              </div>
+
+              <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 flex items-start gap-4 card-hover animate-slide-left delay-4">
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-sky-500 to-sky-600 flex items-center justify-center flex-shrink-0">
+                  <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="font-semibold text-slate-800 mb-1">Priorização e governança</h3>
+                  <p class="text-slate-600 text-sm">Indicadores, portfólio e tomada de decisão</p>
+                </div>
+              </div>
+
+              <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 flex items-start gap-4 card-hover animate-slide-right delay-5">
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center flex-shrink-0">
+                  <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="font-semibold text-slate-800 mb-1">Open innovation</h3>
+                  <p class="text-slate-600 text-sm">Desafios, startups e universidade</p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+        <!-- SLIDE 16 - Services Structure -->
+        <section class="slide h-full flex-col p-6 md:p-12 overflow-y-auto" data-slide="16">
+          <div class="max-w-5xl mx-auto w-full">
+            <div class="flex items-center gap-3 mb-8 animate-slide-left">
+              <span class="px-3 py-1 text-xs font-semibold text-white rounded-full bg-pink-500">PRODUTO 3</span>
+              <span class="text-slate-400">•</span>
+              <span class="text-sm text-slate-600">Estrutura em Subprodutos</span>
+            </div>
+
+            <h2 class="title-font text-3xl md:text-4xl font-bold text-slate-800 mb-2 animate-slide-left delay-1">
+              Como os serviços se organizam
+            </h2>
+            <p class="text-slate-600 mb-8 animate-slide-left delay-1">
+              Escolha por demanda: diagnóstico, projeto, capacitação ou conexão.
+            </p>
+
+            <div class="grid md:grid-cols-2 gap-6 mb-8">
+              <div class="bg-gradient-to-br from-pink-500 to-pink-600 rounded-2xl p-6 text-white card-hover animate-slide-left delay-2">
+                <div class="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center mb-4">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                  </svg>
+                </div>
+                <h3 class="font-bold text-lg mb-2">Diagnóstico de Maturidade</h3>
+                <p class="text-pink-100">Em inovação</p>
+              </div>
+
+              <div class="bg-gradient-to-br from-violet-500 to-violet-600 rounded-2xl p-6 text-white card-hover animate-slide-right delay-3">
+                <div class="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center mb-4">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                  </svg>
+                </div>
+                <h3 class="font-bold text-lg mb-2">Estruturação de Projetos</h3>
+                <p class="text-violet-100">E editais</p>
+              </div>
+
+              <div class="bg-gradient-to-br from-sky-500 to-sky-600 rounded-2xl p-6 text-white card-hover animate-slide-left delay-4">
+                <div class="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center mb-4">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                  </svg>
+                </div>
+                <h3 class="font-bold text-lg mb-2">Capacitação Corporativa</h3>
+                <p class="text-sky-100">Treinamentos e workshops</p>
+              </div>
+
+              <div class="bg-gradient-to-br from-green-500 to-green-600 rounded-2xl p-6 text-white card-hover animate-slide-right delay-5">
+                <div class="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center mb-4">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                  </svg>
+                </div>
+                <h3 class="font-bold text-lg mb-2">Inovação Aberta</h3>
+                <p class="text-green-100">Conexão universidade-mercado</p>
+              </div>
+            </div>
+
+            <!-- Eventos / Complementos -->
+            <div class="space-y-6">
+              <div class="text-center mb-6">
+                <h3 class="title-font text-2xl font-bold text-slate-800 mb-2">Complementos Estratégicos</h3>
+                <p class="text-slate-600">Ativamos rede e oportunidades para gerar negócios.</p>
+              </div>
+
+              <div class="grid md:grid-cols-2 gap-6">
+                <div class="bg-gradient-to-br from-sky-50 to-blue-50 rounded-2xl p-8 border-2 border-sky-200 card-hover animate-slide-left delay-5">
+                  <div class="text-4xl mb-4">☕</div>
+                  <h4 class="text-2xl font-bold text-slate-800 mb-3">Café e Negócios</h4>
+                  <p class="text-slate-700 mb-5 font-medium">Momentos estratégicos de integração e networking</p>
+                  <ul class="space-y-3">
+                    <li class="flex items-center gap-3">
+                      <svg class="w-5 h-5 text-sky-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                      </svg>
+                      <span class="text-slate-700">Networking com empreendedores</span>
+                    </li>
+                    <li class="flex items-center gap-3">
+                      <svg class="w-5 h-5 text-sky-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                      </svg>
+                      <span class="text-slate-700">Palestras e cases (quando aplicável)</span>
+                    </li>
+                    <li class="flex items-center gap-3">
+                      <svg class="w-5 h-5 text-sky-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                      </svg>
+                      <span class="text-slate-700">Conexões e oportunidades</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <div class="bg-gradient-to-br from-violet-50 to-purple-50 rounded-2xl p-8 border-2 border-violet-200 card-hover animate-slide-right delay-5">
+                  <div class="text-4xl mb-4">📋</div>
+                  <h4 class="text-2xl font-bold text-slate-800 mb-3">Editais de Fomento</h4>
+                  <p class="text-slate-700 mb-5 font-medium">Acesso a financiamento e oportunidades de crescimento</p>
+                  <ul class="space-y-3">
+                    <li class="flex items-center gap-3">
+                      <svg class="w-5 h-5 text-violet-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                      </svg>
+                      <span class="text-slate-700">Mapeamento de oportunidades</span>
+                    </li>
+                    <li class="flex items-center gap-3">
+                      <svg class="w-5 h-5 text-violet-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                      </svg>
+                      <span class="text-slate-700">Estruturação técnica de projetos</span>
+                    </li>
+                    <li class="flex items-center gap-3">
+                      <svg class="w-5 h-5 text-violet-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                      </svg>
+                      <span class="text-slate-700">Suporte na submissão</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="text-center mt-8 animate-scale delay-5">
+              <button onclick="goToSlide(1)" class="inline-flex items-center gap-2 px-6 py-3 bg-slate-800 hover:bg-slate-700 text-white rounded-full transition-all">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+                <span>Voltar ao Início</span>
+              </button>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+    <!-- PRICING / COMPARE VIEW -->
+    <main id="pricing-view" class="flex-1 overflow-y-auto hidden">
+      <div class="py-12 px-4 bg-gradient-to-b from-slate-50 to-white">
+        <div class="max-w-6xl mx-auto">
+
+          <!-- Header -->
+          <div class="text-center mb-12">
+            <span class="px-4 py-2 bg-sky-100 text-sky-700 rounded-full text-sm font-semibold inline-block mb-4">⚖️ COMPARATIVO</span>
+            <h1 class="title-font text-4xl font-bold text-slate-800 mb-4">Transparência de escopo e investimento</h1>
+            <p class="text-lg text-slate-600">
+              Comparativo de formatos comuns de apoio: incubadora, coworking e aceleradora. O objetivo é clareza de escopo e custo.
+            </p>
+            <p class="text-sm text-slate-500 mt-3">
+              * Valores e modalidades podem variar conforme edital, disponibilidade e escopo contratado.
+            </p>
+          </div>
+
+          <!-- Pricing Cards Grid -->
+          <div class="space-y-6 mb-12">
+
+            
+
+            <!-- Card 2: Pré-Incubação -->
+            <div class="bg-white rounded-2xl shadow-lg border-2 border-slate-200 overflow-hidden hover:shadow-xl transition-shadow">
+              <div class="h-2 bg-gradient-to-r from-violet-500 to-violet-600"></div>
+              <div class="grid md:grid-cols-2 gap-0">
+                <div class="p-6 border-r border-slate-200">
+                  <div class="flex items-center gap-2 mb-4">
+                    <span class="px-3 py-1 bg-violet-100 text-violet-700 rounded-full text-xs font-bold">INBATEC</span>
+                  </div>
+                  <h3 class="text-lg font-bold text-slate-800 mb-2">📚 Pré-Incubação</h3>
+                  <div class="text-3xl font-bold text-violet-600 mb-4">
+                     Gratuito <span class="text-lg text-slate-600">/prioridade nas vagas</span>
+                  </div>
+                  <ul class="space-y-2 text-sm">
+                    <li class="flex items-center gap-2 text-slate-700">
+                      <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                      Diagnóstico de prontidão
+                    </li>
+                    <li class="flex items-center gap-2 text-slate-700">
+                      <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                      Ciclo estruturado por semanas (ideia → problema → proposta)
+                    </li>
+                    <li class="flex items-center gap-2 text-slate-700">
+                      <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                      Mentorias (quando aplicável)
+                    </li>
+                    <li class="flex items-center gap-2 text-slate-700">
+                      <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                      Preparação para incubação/editais
+                    </li>
+                  </ul>
+                </div>
+
+                <div class="p-6 bg-slate-50">
+                  <div class="flex items-center gap-2 mb-4">
+                    <span class="px-3 py-1 bg-slate-200 text-slate-600 rounded-full text-xs font-bold">REFERÊNCIA</span>
+                  </div>
+                  <h3 class="text-lg font-bold text-slate-500 mb-2">Agentes de inovação externos</h3>
+                  <div class="text-3xl font-bold text-slate-500 mb-4">
+                    R$ 3.000–5.000<span class="text-lg text-slate-500">/programa</span>
+                  </div>
+                  <ul class="space-y-2 text-sm">
+                    <li class="flex items-center gap-2 text-slate-600">
+                      <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                      Custos variáveis por programa
+                    </li>
+                    <li class="flex items-center gap-2 text-slate-600">
+                      <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                      Pouca contextualização local
+                    </li>
+                    <li class="flex items-center gap-2 text-slate-600">
+                      <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                      Mentoria genérica (não contínua)
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 3: Incubação -->
+            <div class="bg-white rounded-2xl shadow-lg border-4 border-sky-500 overflow-hidden hover:shadow-xl transition-shadow relative">
+              <div class="absolute top-0 right-0 bg-sky-500 text-white px-4 py-1 rounded-bl-lg text-sm font-bold">
+                INCUBAÇÃO + RESIDÊNCIA
+              </div>
+              <div class="h-2 bg-gradient-to-r from-sky-500 to-sky-600"></div>
+
+              <div class="grid md:grid-cols-2 gap-0">
+                <div class="p-6 border-r border-slate-200">
+                  <div class="flex items-center gap-2 mb-4">
+                    <span class="px-3 py-1 bg-sky-100 text-sky-700 rounded-full text-xs font-bold">INBATEC</span>
+                  </div>
+                  <h3 class="text-lg font-bold text-slate-800 mb-2">🚀 Incubação</h3>
+                  <div class="text-3xl font-bold text-sky-600 mb-4">
+                    R$ 450 <span class="text-lg text-slate-600">/mês</span>
+                  </div>
+                  <p class="text-sm text-slate-500 mb-4">* Conforme modalidade (virtual/presencial) e regulamento vigente.</p>
+                  <ul class="space-y-2 text-sm">
+                    <li class="flex items-center gap-2 text-slate-700">
+                      <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                      Acompanhamento contínuo (até 36 meses)
+                    </li>
+                    <li class="flex items-center gap-2 text-slate-700">
+                      <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                      Plano de ação personalizado
+                    </li>
+                    <li class="flex items-center gap-2 text-slate-700">
+                      <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                      Diagnóstico contínuo e mentorias
+                    </li>
+                    <li class="flex items-center gap-2 text-slate-700">
+                      <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                      Apoio institucional, PI e acesso ao ecossistema
+                    </li>
+                  </ul>
+                </div>
+
+                <div class="p-6 bg-slate-50">
+                  <div class="flex items-center gap-2 mb-4">
+                    <span class="px-3 py-1 bg-slate-200 text-slate-600 rounded-full text-xs font-bold">REFERÊNCIA</span>
+                  </div>
+                  <h3 class="text-lg font-bold text-slate-500 mb-2">Incubadoras mercado</h3>
+                  <div class="text-3xl font-bold text-slate-500 mb-4">
+                    R$ 8.000–15.000<span class="text-lg text-slate-500">/mes</span>
+                  </div>
+                  <ul class="space-y-2 text-sm">
+                    <li class="flex items-center gap-2 text-slate-600">
+                      <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                      Ciclos curtos (3–6 meses)
+                    </li>
+                    <li class="flex items-center gap-2 text-slate-600">
+                      <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                      Foco em pitch, não em estrutura
+                    </li>
+                    <li class="flex items-center gap-2 text-slate-600">
+                      <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                      Pouco suporte institucional no pós
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            
+<!-- Card 1: Salas Físicas -->
+            <div class="bg-white rounded-2xl shadow-lg border-2 border-slate-200 overflow-hidden hover:shadow-xl transition-shadow">
+              <div class="h-2 bg-gradient-to-r from-blue-500 to-blue-600"></div>
+              <div class="grid md:grid-cols-2 gap-0">
+                <div class="p-6 border-r border-slate-200">
+                  <div class="flex items-center gap-2 mb-4">
+                    <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-bold">INBATEC</span>
+                  </div>
+                  <h3 class="text-lg font-bold text-slate-800 mb-2">🏢 Salas & Coworking </h3>
+                  <div class="text-3xl font-bold text-blue-600 mb-4">
+                     R$ 400<span class="text-lg text-slate-600">/mês</span> 
+                  </div>
+                  <div class="text-3xl font-bold text-blue-600 mb-4">
+                     R$ 95<span class="text-lg text-slate-600">/assento no coworking</span>
+                  </div>
+                  <p class="text-sm text-slate-500 mb-4">* Média baseada no tamanho da sala</p>
+                  <ul class="space-y-2 text-sm">
+                    <li class="flex items-center gap-2 text-slate-700">
+                      <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                      Espaço físico integrado ao ecossistema
+                    </li>
+                    <li class="flex items-center gap-2 text-slate-700">
+                      <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                      Infraestrutura compartilhada
+                    </li>
+                    <li class="flex items-center gap-2 text-slate-700">
+                      <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                      Ambientes de reunião e treinamento
+                    </li>
+                  </ul>
+                </div>
+
+                <div class="p-6 bg-slate-50">
+                  <div class="flex items-center gap-2 mb-4">
+                    <span class="px-3 py-1 bg-slate-200 text-slate-600 rounded-full text-xs font-bold">REFERÊNCIA</span>
+                  </div>
+                  <h3 class="text-lg font-bold text-slate-500 mb-2">Coworkings privados</h3>
+                  <div class="text-3xl font-bold text-slate-500 mb-4">
+                    R$ 800–1.200<span class="text-lg text-slate-500">/mês</span>
+                  </div>
+                  <div class="text-3xl font-bold text-slate-500 mb-4">
+                    R$ 150-300<span class="text-lg text-slate-500">/dia coworking</span>
+                  </div>
+                  <ul class="space-y-2 text-sm">
+                    <li class="flex items-center gap-2 text-slate-600">
+                      <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                      Apenas espaço físico
+                    </li>
+                    <li class="flex items-center gap-2 text-slate-600">
+                      <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                      Networking genérico
+                    </li>
+                    <li class="flex items-center gap-2 text-slate-600">
+                      <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                      Sem acompanhamento de negócio
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+
+            <!-- Card 4: Mentorias -->
+            <div class="bg-white rounded-2xl shadow-lg border-2 border-slate-200 overflow-hidden hover:shadow-xl transition-shadow">
+              <div class="h-2 bg-gradient-to-r from-pink-500 to-pink-600"></div>
+              <div class="grid md:grid-cols-2 gap-0">
+                <div class="p-6 border-r border-slate-200">
+                  <div class="flex items-center gap-2 mb-4">
+                    <span class="px-3 py-1 bg-pink-100 text-pink-700 rounded-full text-xs font-bold">INBATEC</span>
+                  </div>
+                  <h3 class="text-lg font-bold text-slate-800 mb-2">💼 Mentoria especializada</h3>
+                  <div class="text-3xl font-bold text-pink-600 mb-4">
+                    Incluso na incubação<span class="text-lg text-slate-600"></span>
+                  </div>
+                  <ul class="space-y-2 text-sm">
+                    <li class="flex items-center gap-2 text-slate-700">
+                      <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                      Mentoria direcionada ao estágio do negócio
+                    </li>
+                    <li class="flex items-center gap-2 text-slate-700">
+                      <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                      Apoio à tomada de decisão crític
+                    </li>
+                    <li class="flex items-center gap-2 text-slate-700">
+                      <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                      Especialistas alinhados ao contexto local
+                    </li>
+                  </ul>
+                </div>
+
+                <div class="p-6 bg-slate-50">
+                  <div class="flex items-center gap-2 mb-4">
+                    <span class="px-3 py-1 bg-slate-200 text-slate-600 rounded-full text-xs font-bold">REFERÊNCIA</span>
+                  </div>
+                  <h3 class="text-lg font-bold text-slate-500 mb-2">Consultoria externa</h3>
+                  <div class="text-3xl font-bold text-slate-500 mb-4">
+                    R$ 1.000–2.000<span class="text-lg text-slate-500">/hora</span>
+                  </div>
+                  <ul class="space-y-2 text-sm">
+                    <li class="flex items-center gap-2 text-slate-600">
+                      <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                      Atuação pontual
+                    </li>
+                    <li class="flex items-center gap-2 text-slate-600">
+                      <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                      Sem visão sistêmica do negócio
+                    </li>
+                    <li class="flex items-center gap-2 text-slate-600">
+                      <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                      Continuidade depende de contratação
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 5: Diagnóstico -->
+            <div class="bg-white rounded-2xl shadow-lg border-2 border-slate-200 overflow-hidden hover:shadow-xl transition-shadow">
+              <div class="h-2 bg-gradient-to-r from-green-500 to-green-600"></div>
+              <div class="grid md:grid-cols-2 gap-0">
+                <div class="p-6 border-r border-slate-200">
+                  <div class="flex items-center gap-2 mb-4">
+                    <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold">INBATEC</span>
+                  </div>
+                  <h3 class="text-lg font-bold text-slate-800 mb-2">💰 Apoio a Editais de Fomento</h3>
+                  <div class="text-3xl font-bold text-green-600 mb-4">
+                    Incluso na incubação<span class="text-lg text-slate-600"></span>
+                  </div>
+                  <ul class="space-y-2 text-sm">
+                    <li class="flex items-center gap-2 text-slate-700">
+                      <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                      Mapeamento contínuo de editais aderentes ao estágio da empresa
+                    </li>
+                    <li class="flex items-center gap-2 text-slate-700">
+                      <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                      Curadoria de oportunidades
+                    </li>
+                    <li class="flex items-center gap-2 text-slate-700">
+                      <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                      Apoio na estruturação da proposta (técnica + negócio)
+                    </li>
+                  </ul>
+                </div>
+
+                <div class="p-6 bg-slate-50">
+                  <div class="flex items-center gap-2 mb-4">
+                    <span class="px-3 py-1 bg-slate-200 text-slate-600 rounded-full text-xs font-bold">REFERÊNCIA</span>
+                  </div>
+                  <h3 class="text-lg font-bold text-slate-500 mb-2">Consultorias</h3>
+                  <div class="text-3xl font-bold text-slate-500 mb-4">
+                    R$ 5.000–20.000<span class="text-lg text-slate-500">/edital</span>
+                  </div>
+                  <ul class="space-y-2 text-sm">
+                    <li class="flex items-center gap-2 text-slate-600">
+                      <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                      Cobrança por submissão (ganhou ou não)
+                    </li>
+                    <li class="flex items-center gap-2 text-slate-600">
+                      <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                      Foco no edital, não na empresa
+                    </li>
+                    <li class="flex items-center gap-2 text-slate-600">
+                      <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                      Pouca integração com estratégia e execução
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 6: Capacitação -->
+            <div class="bg-white rounded-2xl shadow-lg border-2 border-slate-200 overflow-hidden hover:shadow-xl transition-shadow">
+              <div class="h-2 bg-gradient-to-r from-orange-500 to-orange-600"></div>
+              <div class="grid md:grid-cols-2 gap-0">
+                <div class="p-6 border-r border-slate-200">
+                  <div class="flex items-center gap-2 mb-4">
+                    <span class="px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-xs font-bold">INBATEC</span>
+                  </div>
+                  <h3 class="text-lg font-bold text-slate-800 mb-2">🏛️ Diferenciais de Parque Tecnológico Universitário</h3>
+                  <div class="text-3xl font-bold text-orange-600 mb-4">
+                    Incluso na Incubação<span class="text-lg text-slate-600"></span>
+                  </div>
+                  <ul class="space-y-2 text-sm">
+                    <li class="flex items-center gap-2 text-slate-700">
+                      <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                      Inserção direta no ecossistema universitário (UFLA)
+                    </li>
+                    <li class="flex items-center gap-2 text-slate-700">
+                      <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                      Suporte especializado em PI e transferência de tecnologia
+                    </li>
+                    <li class="flex items-center gap-2 text-slate-700">
+                      <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                      Acesso a mão de obra qualificada (bolsistas e pesquisadores)
+                    </li>
+                  </ul>
+                </div>
+
+                <div class="p-6 bg-slate-50">
+                  <div class="flex items-center gap-2 mb-4">
+                    <span class="px-3 py-1 bg-slate-200 text-slate-600 rounded-full text-xs font-bold">REFERÊNCIA</span>
+                  </div>
+                  <h3 class="text-lg font-bold text-slate-500 mb-2">-</h3>
+                  
+                  
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- CTA -->
+          <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-8 text-center">
+            <h3 class="title-font text-2xl font-bold text-slate-800 mb-3">Quer avaliar fit?</h3>
+            <p class="text-slate-600 mb-6">
+              Se você me contar seu estágio (ideia, MVP, tração), eu recomendo o caminho: pré-incubação, incubação (virtual/presencial) ou serviços.
+            </p>
+            <button onclick="switchView('sales')" class="inline-flex items-center gap-2 px-6 py-3 bg-slate-800 hover:bg-slate-700 text-white rounded-full transition-all">
+              <span>Falar com a equipe</span>
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </main>
+
+   <!-- SALES / DECOLAR VIEW (pós-reunião / fechamento de intenção) -->
+<main id="sales-view" class="flex-1 overflow-y-auto hidden">
+  <div class="py-12 px-4 bg-gradient-to-b from-slate-50 to-white">
+    <div class="max-w-6xl mx-auto">
+
+      <div class="text-center mb-10">
+        <span class="px-4 py-2 bg-violet-100 text-violet-700 rounded-full text-sm font-semibold inline-block mb-4">
+          ✅ FIM DA APRESENTAÇÃO · PRÓXIMO PASSO
+        </span>
+
+        <h1 class="title-font text-4xl font-bold text-slate-800 mb-4">
+          Qual é o melhor próximo passo para você dentro da INBATEC?
+        </h1>
+
+        <p class="text-lg text-slate-600 max-w-3xl mx-auto">
+          Em 2 minutos, você preenche o formulário e nós te direcionamos para a trilha certa:
+          <span class="font-semibold text-slate-700">Bootcamp</span>,
+          <span class="font-semibold text-slate-700">Pré-incubação</span>,
+          <span class="font-semibold text-slate-700">Incubação</span> ou
+          <span class="font-semibold text-slate-700">Serviços</span>.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-6 mb-10">
+
+        <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 card-hover">
+          <div class="w-12 h-12 rounded-xl icon-container flex items-center justify-center mb-4">
+            <svg class="w-6 h-6 text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M9 12h6m-6 4h6M12 4a8 8 0 100 16 8 8 0 000-16z" />
+            </svg>
+          </div>
+          <h3 class="font-semibold text-slate-800 mb-2">Direcionamento claro</h3>
+          <p class="text-slate-600 text-sm">Você sai com o “próximo passo” recomendado para seu estágio.</p>
+        </div>
+
+        <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 card-hover">
+          <div class="w-12 h-12 rounded-xl icon-container flex items-center justify-center mb-4">
+            <svg class="w-6 h-6 text-violet-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M8 10h.01M12 10h.01M16 10h.01M9 16h6M12 4a8 8 0 110 16 8 8 0 010-16z" />
+            </svg>
+          </div>
+          <h3 class="font-semibold text-slate-800 mb-2">Conversa 1:1 (quando fizer sentido)</h3>
+          <p class="text-slate-600 text-sm">Se houver fit, agendamos uma reunião individual para desenhar o caminho.</p>
+        </div>
+
+        <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 card-hover">
+          <div class="w-12 h-12 rounded-xl icon-container flex items-center justify-center mb-4">
+            <svg class="w-6 h-6 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 8v4l3 3M12 20a8 8 0 100-16 8 8 0 000 16z" />
+            </svg>
+          </div>
+          <h3 class="font-semibold text-slate-800 mb-2">Resposta rápida</h3>
+          <p class="text-slate-600 text-sm">Retorno por e-mail/WhatsApp com o encaminhamento e próximos passos.</p>
+        </div>
+
+      </div>
+
+      <div class="bg-gradient-to-br from-slate-900 to-slate-800 rounded-3xl p-8 md:p-10 text-white">
+        <div class="grid md:grid-cols-2 gap-8 items-start">
+
+          <div>
+            <h3 class="title-font text-2xl md:text-3xl font-bold mb-3">Antes de encerrar…</h3>
+
+            <p class="text-slate-200 mb-6">
+              Se você viu valor na proposta e quer avaliar com calma,
+              faça um único movimento agora: <span class="font-semibold">preencher o formulário</span>.
+              Isso nos permite te direcionar com precisão — sem “venda empurrada”.
+            </p>
+
+            <div class="space-y-3 text-slate-200 text-sm">
+              <div class="flex gap-3">
+                <span class="w-6 h-6 rounded-full bg-white/15 flex items-center justify-center text-xs font-bold">1</span>
+                <span>Você informa seu perfil e estágio (ideia/MVP/tração).</span>
+              </div>
+              <div class="flex gap-3">
+                <span class="w-6 h-6 rounded-full bg-white/15 flex items-center justify-center text-xs font-bold">2</span>
+                <span>Nós retornamos com a trilha recomendada + material de apoio (quando aplicável).</span>
+              </div>
+              <div class="flex gap-3">
+                <span class="w-6 h-6 rounded-full bg-white/15 flex items-center justify-center text-xs font-bold">3</span>
+                <span>Se houver fit: agendamos a reunião 1:1 para desenhar entrada e próximos passos.</span>
+              </div>
+            </div>
+
+            <div class="mt-6 flex flex-wrap gap-3">
+              <span class="px-4 py-2 bg-white/10 rounded-full text-sm">Bootcamp de Ideação</span>
+              <span class="px-4 py-2 bg-white/10 rounded-full text-sm">Pré-incubação</span>
+              <span class="px-4 py-2 bg-white/10 rounded-full text-sm">Incubação</span>
+              <span class="px-4 py-2 bg-white/10 rounded-full text-sm">Serviços / Diagnóstico</span>
+            </div>
+          </div>
+
+          <div class="bg-white/5 border border-white/10 rounded-2xl p-6">
+  <h4 class="font-semibold text-lg mb-2">Ação agora (2 minutos)</h4>
+  <p class="text-slate-200 text-sm mb-4">
+    Clique no botão para abrir o formulário — ou escaneie o QR Code.
+  </p>
+
+  <!-- CTA principal + QR -->
+  <div class="grid md:grid-cols-2 gap-4 items-start">
+    <!-- Botão -->
+    <div>
+      <button type="button" onclick="openIntakeForm()"
+        class="w-full px-4 py-3 rounded-xl bg-sky-500 hover:bg-sky-400 transition-all font-semibold">
+        Preencher formulário
+      </button>
+
+      <p class="mt-3 text-xs text-slate-300">
+        Depois do envio, a equipe entra em contato com o direcionamento do próximo passo.
+      </p>
+    </div>
+
+    <!-- QR Code (placeholder) -->
+    <div class="flex flex-col items-center justify-center p-4 rounded-xl bg-white/5 border border-white/10">
+      <!-- Troque o src pela imagem do seu QR Code -->
+      <img
+        src="assets/qr-formulario.png"
+        alt="QR Code do formulário"
+        class="w-32 h-32 rounded-lg bg-white p-2"
+      />
+      <p class="mt-2 text-xs text-slate-300 text-center">
+        Aponte a câmera para acessar o formulário
+      </p>
+    </div>
+  </div>
+
+  <!-- Promessa -->
+  <div class="mt-5 p-4 rounded-xl bg-white/5 border border-white/10">
+    <p class="text-sm text-slate-200">
+      <span class="font-semibold">Promessa:</span> o formulário serve só para direcionamento.
+      Sem spam. Sem empurrar produto.
+    </p>
+  </div>
+
+  <!-- Contatos -->
+  <div class="mt-5 text-xs text-slate-300 space-y-1">
+    <p><span class="font-semibold">Contato:</span> inbatec@ufla.br (trocar)</p>
+    <p><span class="font-semibold">Local:</span> Parque Tecnológico UFLA</p>
+  </div>
+</div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+
+    <!-- Footer / Bottom Navigation (mobile) -->
+    <footer class="flex-shrink-0 bg-white border-t border-slate-200 px-4 py-3">
+      <div class="max-w-6xl mx-auto flex items-center justify-between gap-3">
+        <div class="flex items-center gap-2">
+          <button onclick="prevSlide()"
+            class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold transition-all">
+            ◀ Anterior
+          </button>
+          <button onclick="nextSlide()"
+            class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-sm font-semibold transition-all">
+            Próximo ▶
+          </button>
+        </div>
+
+        <div class="hidden sm:flex items-center gap-2">
+          <button onclick="goToSlide(1)"
+            class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold transition-all">
+            ⌂ Início
+          </button>
+          <button onclick="switchView('presentation')"
+            class="px-4 py-2 rounded-xl bg-sky-100 hover:bg-sky-200 text-sky-800 text-sm font-semibold transition-all">
+            📊 Slides
+          </button>
+          <button onclick="switchView('pricing')"
+            class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold transition-all">
+            ⚖️ Compare
+          </button>
+          <button onclick="switchView('sales')"
+            class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold transition-all">
+            🚀 Decolar!
+          </button>
+        </div>
+      </div>
+    </footer>
+
+  </div>
+
+  <script>
+    // -----------------------------
+    // State
+    // -----------------------------
+    let currentSlideIndex = 1;
+
+    const slideEls = () => Array.from(document.querySelectorAll('#presentation-view .slide'));
+    const totalSlides = () => slideEls().length;
+
+    // -----------------------------
+    // Helpers
+    // -----------------------------
+
+    // -----------------------------
+    // CTA actions (pós-reunião)
+    // -----------------------------
+    function openIntakeForm() {
+      const formUrl = "https://forms.gle/gbaNhPR7CBve55Aw8"; // troque aqui
+      window.open(formUrl, "_blank", "noopener,noreferrer");
+    }
+
+    function openSchedule() {
+      const scheduleUrl = "https://calendly.com/seu-link"; // troque aqui
+      window.open(scheduleUrl, "_blank", "noopener,noreferrer");
+    }
+
+    // Mantém compatibilidade com o botão antigo "Falar com a equipe"
+    function openContact() {
+      openIntakeForm();
+    }
+
+
+    function clamp(n, min, max) {
+      return Math.max(min, Math.min(max, n));
+    }
+
+    function setActiveSlide(index) {
+      const slides = slideEls();
+      const max = slides.length;
+
+      currentSlideIndex = clamp(index, 1, max);
+
+      slides.forEach((s) => s.classList.remove('active'));
+      const active = slides.find(s => Number(s.dataset.slide) === currentSlideIndex);
+      if (active) active.classList.add('active');
+
+      // Scroll para o topo do container de slides (melhora UX)
+      const container = document.querySelector('#presentation-view');
+      if (container) container.scrollTop = 0;
+
+      updateHeaderUI();
+      highlightNavTab(); // mantém consistência de view
+    }
+
+    function updateHeaderUI() {
+      // Counter
+      const currentSlideEl = document.getElementById('current-slide');
+      const totalSlidesEl = document.getElementById('total-slides');
+      if (currentSlideEl) currentSlideEl.textContent = String(currentSlideIndex);
+      if (totalSlidesEl) totalSlidesEl.textContent = String(totalSlides());
+
+      // Progress
+      const progressBar = document.getElementById('progress-bar');
+      if (progressBar) {
+        const pct = (currentSlideIndex / totalSlides()) * 100;
+        progressBar.style.width = pct.toFixed(2) + '%';
+      }
+    }
+
+    function isViewActive(viewId) {
+      const el = document.getElementById(viewId);
+      return el && !el.classList.contains('hidden');
+    }
+
+    function highlightNavTab() {
+      const tabs = [
+        { id: 'nav-presentation', view: 'presentation' },
+        { id: 'nav-pricing', view: 'pricing' },
+        { id: 'nav-sales', view: 'sales' },
+      ];
+
+      tabs.forEach(t => {
+        const btn = document.getElementById(t.id);
+        if (!btn) return;
+
+        const active = (
+          (t.view === 'presentation' && isViewActive('presentation-view')) ||
+          (t.view === 'pricing' && isViewActive('pricing-view')) ||
+          (t.view === 'sales' && isViewActive('sales-view'))
+        );
+
+        btn.className =
+          "nav-tab px-4 py-2 rounded-lg font-medium text-sm whitespace-nowrap transition-all border-2 " +
+          (active
+            ? "bg-sky-100 text-sky-700 border-sky-500"
+            : "bg-slate-100 text-slate-600 border-transparent hover:bg-slate-200");
+      });
+
+      // Mostrar/ocultar barra de progresso e contador dependendo da view
+      const progressContainer = document.getElementById('progress-container');
+      const slideCounter = document.getElementById('slide-counter');
+
+      const show = isViewActive('presentation-view');
+      if (progressContainer) progressContainer.classList.toggle('hidden', !show);
+      if (slideCounter) slideCounter.classList.toggle('hidden', !show);
+    }
+
+    // -----------------------------
+    // Public API (buttons)
+    // -----------------------------
+    function goToSlide(n) {
+      // Garantir que está na view apresentação
+      switchView('presentation');
+      setActiveSlide(Number(n));
+    }
+
+    function nextSlide() {
+      if (!isViewActive('presentation-view')) {
+        // se estiver em outra view, vai pra apresentação
+        switchView('presentation');
+        return;
+      }
+      setActiveSlide(currentSlideIndex + 1);
+    }
+
+    function prevSlide() {
+      if (!isViewActive('presentation-view')) {
+        switchView('presentation');
+        return;
+      }
+      setActiveSlide(currentSlideIndex - 1);
+    }
+
+    function switchView(view) {
+      const presentation = document.getElementById('presentation-view');
+      const pricing = document.getElementById('pricing-view');
+      const sales = document.getElementById('sales-view');
+
+      if (!presentation || !pricing || !sales) return;
+
+      presentation.classList.add('hidden');
+      pricing.classList.add('hidden');
+      sales.classList.add('hidden');
+
+      if (view === 'presentation') presentation.classList.remove('hidden');
+      if (view === 'pricing') pricing.classList.remove('hidden');
+      if (view === 'sales') sales.classList.remove('hidden');
+
+      // Ajustes de UI
+      highlightNavTab();
+      updateHeaderUI();
+    }
+
+    function openContact() {
+      // ajuste aqui conforme seu canal real:
+      // - WhatsApp
+      // - e-mail
+      // - formulário
+      // - link do Element/CRM
+
+      // Exemplo WhatsApp (substitua o número e mensagem):
+      const phone = "5535000000000"; // <- coloque seu número com DDI/DDD
+      const msg = encodeURIComponent("Olá! Quero entender o fluxo de entrada na INBATEC (ideia/MVP/tração). Podemos conversar?");
+      window.open(`https://wa.me/${phone}?text=${msg}`, "_blank");
+    }
+
+    // -----------------------------
+    // Keyboard navigation
+    // -----------------------------
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') nextSlide();
+      if (e.key === 'ArrowLeft') prevSlide();
+      if (e.key === 'Escape') goToSlide(1);
+    });
+
+    // -----------------------------
+    // Init
+    // -----------------------------
+    (function init() {
+      // Ajusta total e progresso inicial
+      updateHeaderUI();
+      highlightNavTab();
+
+      // Se por acaso tiver mais/menos slides no futuro:
+      const totalSlidesEl = document.getElementById('total-slides');
+      if (totalSlidesEl) totalSlidesEl.textContent = String(totalSlides());
+
+      // Garante slide 1 como padrão
+      setActiveSlide(1);
+    })();
+  </script>
+</body>
+</html>
